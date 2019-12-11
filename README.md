@@ -4,7 +4,6 @@ You can access the [Radio here](https://xlager.github.io/8-BitRadioJS-Three/8bit
 
 ### This is the final project of Computer Graphics made at Universidade Federal de Pelotas
 
-```markdown
 # Concept
 The image shows the first concept of the radio on how it should look.
 
