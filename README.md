@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+## Welcome to 8-Bit Radio with GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/xlager/8-BitRadioJS-Three/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+You can access the [Radio here](https://xlager.github.io/8-BitRadioJS-Three/8bitRadio/tree.html).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### This is the final project of Computer Graphics made at Universidade Federal de Pelotas
 
 ```markdown
-Syntax highlighted code block
+# Concept
+The image shows the first concept of the radio on how it should look.
 
-# Header 1
-## Header 2
-### Header 3
+## Features
+*  Musics and possibility to change between them.
+*  3D obj models, such as the car and the mountains
+*  More than one camera
+*  Animation cycles, road, mountains Linear and the sun and moon based on a Bezier curve
+*  Texture, the road and the moon.
+*  Skybox, since the sunlight and the hemi-light didnt worked so well on skybox, I've made a plain colored background color that changes      depending on the time of the day.
 
-- Bulleted
-- List
+### Language used
+*  JavaScript
+*  Three.js
+*  WebGL
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/xlager/8-BitRadioJS-Three/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**Enjoy** 
+![Image](src)
