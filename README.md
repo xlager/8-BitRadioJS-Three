@@ -18,7 +18,7 @@ The image shows the first concept of the radio on how it should look.
 *  Texture, the road and the moon.
 *  Skybox, since the sunlight and the hemi-light didnt worked so well on skybox, I've made a plain colored background color that changes      depending on the time of the day.
 
-### Language used
+### Used technologies
 *  JavaScript
 *  Three.js
 *  WebGL
