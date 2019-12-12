@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <link rel="stylesheet" type="text/css" href="tree.css">
     <title>Pedro Three.js App</title>
-    <style>
-      html, body { margin: 0; padding: 0; overflow: hidden; }
-    </style>
+
   </head>
   <body>
-      <input type="button" value="Click me" onclick="freeFunc()">
-
+      <a class="button" onclick="PreviousSong()">
+          <img src="icons/previous.png">
+      </a>
+        <a class="button" onclick="NextSong()">
+            <img src="icons/nextlittle.png">
+        </a>
+        <a class="button button-orange" onclick="RandomSound()">
+            <img src="icons/cointoss.png">
+          </a>
+        <a class="button button-purple" onclick="freeFunc()">
+            <img src="icons/camlittle.png">
+          </a>
+       
+      <!-- <input type="button" value="Click me" onclick="freeFunc()"> -->
+      <br>
+      <audio id = "audioController" autoplay = true controls  preload="auto" style=" width:300px;"  >
+        <source  type="audio/mpeg">
+      </audio>
+      <br/>
     <script src="three.min.js"></script>
     <script src="tree.js"></script>
+    <div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://ww.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    <div>Icons made by <a href="https://www.flaticon.com/authors/catalin-fertu" title="Catalin Fertu">Catalin Fertu</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
   </body>
 </html>

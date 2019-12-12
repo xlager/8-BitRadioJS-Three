@@ -2,7 +2,7 @@
 //Scene Variables
 var scene = new THREE.Scene();
 scene.background= new THREE.Color('white');
-var aspect = window.innerWidth / window.innerHeight;
+var aspect =(window.innerWidth) / (window.innerHeight);
 
 //Setting up the renderer
 var renderer = new THREE.WebGLRenderer();
@@ -12,21 +12,20 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.BasicShadowMap;
 
 //Cameras
-var camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000 );
-var cam = new THREE.PerspectiveCamera( 100, aspect, 0.1, 1000 )
+var camera = new THREE.PerspectiveCamera( 70, aspect, 0.1, 10000 );
+var cam = new THREE.PerspectiveCamera(70, aspect, 0.1, 10000)
 var actualCam = camera;
-camera.position.set(0,25,150);
+camera.position.set(0,25,125);
 camera.lookAt(0,0,0);
-cam.position.z = 0;
-cam.position.x = 50;
-cam.lookAt(0,0,0);
+cam.position.set(15,-10,0);
+cam.lookAt(100,-35,0);
 
 //#region Lights
 
 //Scene Lights
 var ambientLight  = new THREE.AmbientLight(0xffffff, .3);
-var hemiLight = new THREE.HemisphereLight( 0x0000ff, 0xe38800, 1); 
-hemiLight.position.set(0,-1,0)
+var hemiLight = new THREE.HemisphereLight( 0x0000ff, 0xe38800, 0.8); 
+hemiLight.position.set(0,1,0)
 scene.add(hemiLight)
 
 //Sun
@@ -37,33 +36,66 @@ var sunLight = new THREE.PointLight(new THREE.Color('yellow'), 1)
  
 //Car
 var carLights = {
-    carlightLeft : new THREE.SpotLight(new THREE.Color('green'), 100),
-    carlightRight : new THREE.SpotLight(new THREE.Color('blue'), 100)
+    carlightLeft : new THREE.SpotLight(new THREE.Color('yellow'), 1),
+    carlightRight : new THREE.SpotLight(new THREE.Color('yellow'), 1),
+    upMostLeft: new THREE.SpotLight(new THREE.Color('white'),.01),
+    upMidLeft: new THREE.SpotLight(new THREE.Color('white'), .01),
+    upMidRight: new THREE.SpotLight(new THREE.Color('white'), .01),
+    upMostRight: new THREE.SpotLight(new THREE.Color('white'), .01),
 }
 carLights.carlightLeft.position.set(28,-1.8,8.5);
-carLights.carlightLeft.angle=Math.PI/9;
+carLights.carlightLeft.angle=degToRad(45);
 carLights.carlightLeft.castShadow=true;
+
 carLights.carlightRight.position.set(28,-1.8,-8.5);
 carLights.carlightRight.target.position.set(100,-5,0);
-carLights.carlightRight.angle=Math.PI/9;;
+carLights.carlightRight.angle=degToRad(45);
 carLights.carlightRight.castShadow=true;
+
+carLights.upMostLeft.position.set(5,1,4);
+carLights.upMostLeft.angle=degToRad(55);
+carLights.upMostLeft.castShadow=true;
+
+carLights.upMidLeft.position.set(5,1,1.5);
+carLights.upMidLeft.angle=degToRad(55);
+carLights.upMidLeft.castShadow=true;
+
+carLights.upMidRight.position.set(5,1,-1.5);
+carLights.upMidRight.angle=degToRad(55);
+carLights.upMidRight.castShadow=true;
+
+carLights.upMostRight.position.set(5,1,-4);
+carLights.upMostRight.angle=degToRad(55);
+carLights.upMostRight.castShadow=true;
+
+
+
+scene.add(carLights.carlightLeft);
+scene.add(carLights.carlightRight);
+scene.add(carLights.upMostLeft);
+scene.add(carLights.upMidLeft);
+scene.add(carLights.upMidRight);
+scene.add(carLights.upMostRight);
 //#endregion
 
 //Textures
 var texLoader = new THREE.TextureLoader();
 var texture = new texLoader.load('textures/road.png')
+var moonTex = new texLoader.load('textures/moon.png')
+var eggsTex = new texLoader.load('textures/eggs.png')
 
 var dayNnightColors= {
     day:[0,0.7490196078431373,1],
     night:[0,0,0.30196078431372547],
-    dawn:[1,0.6,0]
+    dawn:[0.6,0.23,0],
+    moonDawn:[0.10196078431372547, 0.3333333333333333, .8],
 }
 
 //Bezier Sun and Moon Control points
 var orbitsBezierPoints={
-    east:[200,0,-235],
-    west:[-200,0,-235],
-    controlPoints:[[37.5,250,-235],[-37.5,250,-235],[-37.5,-250,-235],[37.5,-250,-235]]
+    east:[300,0,-350],
+    west:[-300,0,-350],
+    controlPoints:[[37.5,350,-350],[-37.5,350,-350],[-37.5,-350,-350],[37.5,-350,-350]]
 }
 //Flags
 var carLoaded = false;
@@ -71,9 +103,10 @@ var carLoaded = false;
 //Setting the geometries
 var geometry = new THREE.BoxGeometry( 10, 10, 10 );
 var planeGeo = new THREE.PlaneGeometry(1000,150);
-var circleGeo = new THREE.SphereGeometry(5, 32, 32);
+var circleGeo = new THREE.SphereGeometry(8, 32, 32);
 var roadMaterial = new THREE.MeshPhongMaterial({color: new THREE.Color('white'),wireframe:false,map:texture});
-var invisibleCircle = new THREE.MeshPhongMaterial({color: new THREE.Color('white'),wireframe:false, transparent:true, opacity : 0.3});
+var egg = new THREE.MeshPhongMaterial({color: new THREE.Color('white'),wireframe:false,map:eggsTex});
+var invisibleCircle = new THREE.MeshPhongMaterial({color: new THREE.Color('white'),wireframe:false, emissive: new THREE.Color(.6,.6,.6), map:moonTex});
 
 //Creating Meshes
 var cube = new THREE.Mesh( geometry, roadMaterial );
@@ -83,16 +116,24 @@ var cube4 = new THREE.Mesh( geometry, roadMaterial );
 var circle = new THREE.Mesh( circleGeo, invisibleCircle);
 var plane = new THREE.Mesh( planeGeo, roadMaterial );
 var plane2 = new THREE.Mesh( planeGeo, roadMaterial );
+var plane3 = new THREE.Mesh( planeGeo, egg );
 
 //Transforms
 plane.rotateX(degToRad(-90))
 plane2.rotateX(degToRad(-90))
 plane.position.set(0,-25,25);
 plane2.position.set(1000,-25,25);
-cube.position.set(100, 1, 0);
-cube2.position.set(-100, 1, 0);
-cube3.position.set(0, 100, 0);
-cube4.position.set(0, -100, 0);
+plane3.position.set(300,10,30);
+plane3.scale.set(.15,.5,.1);
+plane3.rotateY(degToRad(-90))
+
+cube.position.set(50,-25,-7.5);
+cube.scale.set(.5, .5, .5);
+
+cube2.position.set(50,-25,7.5)
+cube2.scale.set(.5, .5, .5);
+cube3.position.set(400, 1, 4);
+cube4.position.set(400, 1, -4);
 cube.scale.set(1,1,1);
 cube.castShadow = true;
 cube.flatShading = true;
@@ -130,15 +171,51 @@ group.add( cube3 );
 group.add( cube4 );
 group.add( plane );
 group.add( plane2 );
+group.add( plane3 );
 group.add( circle );
-
+cube.visible=false;
+cube2.visible=false;
+cube3.visible=false;
+cube4.visible=false;
 var mountainGroup = new THREE.Group();
 var mountainGroup2 = new THREE.Group();
 var skyBoxGroup = new THREE.Group()
+carLights.carlightLeft.target = cube2;
+carLights.carlightRight.target = cube;
+carLights.upMostLeft.target = cube3;
+carLights.upMidLeft.target = cube3;
+carLights.upMostRight.target = cube4;
+carLights.upMidRight.target = cube4;
 
 //Variable that adds Models
 var objLoader =  new THREE.ObjectLoader();
 
+var songsList = [
+    'songs/Rei do Gado.mp3',
+    'songs/Esporte Espetacular Theme Song.mp3',
+    'songs/Abertura de A Grande Familia.mp3',
+    'songs/Proerd.mp3',
+    'songs/ABERTURA DO CHAVES 8 BITS.mp3',
+    'songs/John Cena - My Time Is Now (8-Bit NES Remix).mp3',
+    'songs/DAN DAN GT 8bit.mp3',
+    'songs/Dragon Ball Z - We Gotta Power - 8 Bits.mp3',
+    'songs/Dragon Ball Z Opening 8 bit.mp3',
+    'songs/Evidencias - Chitaozinho e Xororo.mp3',
+    'songs/Mas Que Nada - Sergio Mendes.mp3',
+    'songs/Seu Jorge - Amiga da minha mulher.mp3',
+    'songs/Tim Maia-Dont Want Money.mp3',
+]
+
+var audioController = document.getElementById("audioController");
+document.getElementById("audioController").setAttribute('src', songsList[0]);
+var track = 0;
+audioController.addEventListener("ended", function() { 
+    track++;
+    if(track>=songsList.length)
+       track = 0;
+    audioController.setAttribute('src',songsList[track]);
+    audioController.play();
+ }, true);
 
 //#endregion
 
@@ -154,8 +231,10 @@ function main(){
     render();
 }
 
-
+var songBool = false;
 var render = function (time) {
+   // console.log(audioController.readyState);
+    
     time = time*0.0012
     timeOfFrame = time-lastTime;
     if(isNaN(actualTime)){
@@ -170,15 +249,16 @@ var render = function (time) {
     else{
         skyTime += timeOfFrame;
     }
-    OrbitCycle();
     // if(sunLight.position.y <0)
     //     hemiLight.position.y=1;
     // else
     //     hemiLight.position.y=-1;
+    OrbitCycle();
 
     if(carLoaded){
         CarAnimation(time);
         Carrousel();
+
     }
     renderer.render( scene, actualCam );
     lastTime=time
@@ -268,7 +348,7 @@ function LoadModels(){
 }
 
 function SkyBox(){
-   var skyboxGeometry = new THREE.CubeGeometry(1000,1000,1000);
+   var skyboxGeometry = new THREE.CubeGeometry(10000,10000,10000);
    var cubeMaterials = [
        new THREE.MeshBasicMaterial({color: 	0x00004d, side: THREE.DoubleSide}),
        new THREE.MeshBasicMaterial({color: 	0x00004d, side: THREE.DoubleSide}),
@@ -302,6 +382,22 @@ function CarAnimation(time){
         carToAnim.backLeft.position.set(carToAnim.backLeft.position.x,0,carToAnim.backLeft.position.z)
         carToAnim.frontLeft.position.set(carToAnim.frontLeft.position.x,0,carToAnim.frontLeft.position.z)
         carToAnim.backRight.position.set(carToAnim.backRight.position.x,0,carToAnim.backRight.position.z)
+    }
+    if(sunLight.position.y > 0){
+        carLights.carlightLeft.visible = false;
+        carLights.carlightRight.visible = false;
+        carLights.upMostLeft.visible = false;
+        carLights.upMidLeft.visible = false;
+        carLights.upMostRight.visible = false;
+        carLights.upMidRight.visible = false;
+    }
+    else{
+        carLights.carlightLeft.visible = true;
+        carLights.carlightRight.visible = true;
+        carLights.upMostLeft.visible = true;
+        carLights.upMidLeft.visible = true;
+        carLights.upMostRight.visible = true;
+        carLights.upMidRight.visible = true;
     }
 }
 function degToRad(angle){
@@ -344,6 +440,11 @@ function Bezier(p1,p2,c1,c2,t){
     return final;
 }
 function OrbitCycle(){
+    circle.rotateY(degToRad(1/timeOfDay));
+    circle.rotateX(degToRad(1/timeOfDay));
+    circle.rotateZ(degToRad(1/timeOfDay));
+        //hemiLight.position.y = 1
+   // hemiLight.position.y = -1
     if(actualTime<timeOfDay){
         switch (wichAnim)
         {
@@ -351,12 +452,15 @@ function OrbitCycle(){
                 {
                     let bz = Bezier(orbitsBezierPoints.east,orbitsBezierPoints.west,orbitsBezierPoints.controlPoints[0],orbitsBezierPoints.controlPoints[1],actualTime/timeOfDay);
                     sunLight.position.set(bz[0],bz[1],bz[2]);
+                    circle.position.set(-bz[0],-bz[1],bz[2]);
                     break;
                 }
             case 1:
                 {
                     let bz =(Bezier(orbitsBezierPoints.west,orbitsBezierPoints.east,orbitsBezierPoints.controlPoints[2],orbitsBezierPoints.controlPoints[3],actualTime/timeOfDay));
                     sunLight.position.set(bz[0],bz[1],bz[2]);
+                    circle.position.set(-bz[0],-bz[1],bz[2]);
+                   // hemiLight.position.set(Lerp(0,10,actualTime/timeOfDay),Lerp(0,10,actualTime/timeOfDay),Lerp(0,10,actualTime/timeOfDay));
                     break;
                 }
         }
@@ -375,6 +479,8 @@ function OrbitCycle(){
                                                         Lerp(dayNnightColors.day[2],dayNnightColors.dawn[2],skyTime/(timeOfDay/2)))
                                                         )                                    
                 });
+                hemiLight.position.set(Lerp(-1000,0,actualTime/timeOfDay),Lerp(0,-1000,skyTime/(timeOfDay/2)),0)
+
                 break;
             }
             case 1:{
@@ -384,24 +490,29 @@ function OrbitCycle(){
                                                         Lerp(dayNnightColors.dawn[2],dayNnightColors.night[2],skyTime/(timeOfDay/2)))
                                                         )
                 });
+                hemiLight.position.set(Lerp(0,1000,actualTime/timeOfDay),Lerp(-1000,0,skyTime/(timeOfDay/2)),0)
                 break;
             }
             case 2:{
                 sbx.material.forEach(element => {
-                    element.color.set (new THREE.Color(Lerp(dayNnightColors.night[0],dayNnightColors.dawn[0],skyTime/(timeOfDay/2)),
-                                                        Lerp(dayNnightColors.night[1],dayNnightColors.dawn[1],skyTime/(timeOfDay/2)),
-                                                        Lerp(dayNnightColors.night[2],dayNnightColors.dawn[2],skyTime/(timeOfDay/2)))
+                    element.color.set (new THREE.Color(Lerp(dayNnightColors.night[0],dayNnightColors.moonDawn[0],skyTime/(timeOfDay/2)),
+                                                        Lerp(dayNnightColors.night[1],dayNnightColors.moonDawn[1],skyTime/(timeOfDay/2)),
+                                                        Lerp(dayNnightColors.night[2],dayNnightColors.moonDawn[2],skyTime/(timeOfDay/2)))
                                                         )
                 });
+                hemiLight.position.set(Lerp(1000,0,actualTime/timeOfDay),Lerp(0,1000,skyTime/(timeOfDay/2)),0)
+
                 break;
             }
             case 3:{
                 sbx.material.forEach(element => {
-                    element.color.set (new THREE.Color(Lerp(dayNnightColors.dawn[0],dayNnightColors.day[0],skyTime/(timeOfDay/2)),
-                                                        Lerp(dayNnightColors.dawn[1],dayNnightColors.day[1],skyTime/(timeOfDay/2)),
-                                                        Lerp(dayNnightColors.dawn[2],dayNnightColors.day[2],skyTime/(timeOfDay/2)))
+                    element.color.set (new THREE.Color(Lerp(dayNnightColors.moonDawn[0],dayNnightColors.day[0],skyTime/(timeOfDay/2)),
+                                                        Lerp(dayNnightColors.moonDawn[1],dayNnightColors.day[1],skyTime/(timeOfDay/2)),
+                                                        Lerp(dayNnightColors.moonDawn[2],dayNnightColors.day[2],skyTime/(timeOfDay/2)))
                                                         )
                 });
+                hemiLight.position.set(Lerp(0,-1000,actualTime/timeOfDay),Lerp(1000,0,skyTime/(timeOfDay/2)),0)
+
                 break;
             }
         }
@@ -449,5 +560,27 @@ function PaintCar(carPieces){
     carPieces[19].material[1].emissive.set(0x000000);
     // carPieces[19].material= new THREE.MeshPhongMaterial({color: new THREE.Color('red')});
     // carPieces[19].scale.set(100,100,100);
+}
+
+function NextSong(){
+    track++;
+    if(track>=songsList.length)
+       track = 0;
+    audioController.setAttribute('src',songsList[track]);
+    audioController.play();
+}
+function PreviousSong(){
+    track--;
+    if(track<0)
+       track = 0;
+    audioController.setAttribute('src',songsList[track]);
+    audioController.play();
+}
+function RandomSound(){
+    track = Math.floor(Math.random()*13)
+    if(track<0 || track >= 13)
+        track = 0;
+    audioController.setAttribute('src',songsList[track]);
+    audioController.play();
 }
 //#endregion
