@@ -72,10 +72,10 @@ carLights.upMostRight.castShadow=true;
 
 scene.add(carLights.carlightLeft);
 scene.add(carLights.carlightRight);
-scene.add(carLights.upMostLeft);
-scene.add(carLights.upMidLeft);
-scene.add(carLights.upMidRight);
-scene.add(carLights.upMostRight);
+// scene.add(carLights.upMostLeft);
+// scene.add(carLights.upMidLeft);
+// scene.add(carLights.upMidRight);
+// scene.add(carLights.upMostRight);
 //#endregion
 
 //Textures
@@ -195,13 +195,7 @@ var songsList = [
     'songs/Esporte Espetacular Theme Song.mp3',
     'songs/Abertura de A Grande Familia.mp3',
     'songs/Proerd.mp3',
-    'songs/ABERTURA DO CHAVES 8 BITS.mp3',
-    'songs/John Cena - My Time Is Now (8-Bit NES Remix).mp3',
     'songs/DAN DAN GT 8bit.mp3',
-    'songs/Dragon Ball Z - We Gotta Power - 8 Bits.mp3',
-    'songs/Dragon Ball Z Opening 8 bit.mp3',
-    'songs/Evidencias - Chitaozinho e Xororo.mp3',
-    'songs/Mas Que Nada - Sergio Mendes.mp3',
     'songs/Seu Jorge - Amiga da minha mulher.mp3',
     'songs/Tim Maia-Dont Want Money.mp3',
 ]
@@ -386,18 +380,18 @@ function CarAnimation(time){
     if(sunLight.position.y > 0){
         carLights.carlightLeft.visible = false;
         carLights.carlightRight.visible = false;
-        carLights.upMostLeft.visible = false;
-        carLights.upMidLeft.visible = false;
-        carLights.upMostRight.visible = false;
-        carLights.upMidRight.visible = false;
+        // carLights.upMostLeft.visible = false;
+        // carLights.upMidLeft.visible = false;
+        // carLights.upMostRight.visible = false;
+        // carLights.upMidRight.visible = false;
     }
     else{
         carLights.carlightLeft.visible = true;
         carLights.carlightRight.visible = true;
-        carLights.upMostLeft.visible = true;
-        carLights.upMidLeft.visible = true;
-        carLights.upMostRight.visible = true;
-        carLights.upMidRight.visible = true;
+        // carLights.upMostLeft.visible = true;
+        // carLights.upMidLeft.visible = true;
+        // carLights.upMostRight.visible = true;
+        // carLights.upMidRight.visible = true;
     }
 }
 function degToRad(angle){
@@ -550,7 +544,6 @@ function Carrousel(){
 }
 
 function PaintCar(carPieces){
-    console.log(carPieces);
     // 7,17,18,20(1 e 2) roda direita trás
     // 19 (0 a 9)
     carPieces[19].material.forEach(element => {
