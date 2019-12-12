@@ -6,6 +6,7 @@ You can access the [Radio here](https://xlager.github.io/8-BitRadioJS-Three/8bit
 
 # Concept
 The image shows the first concept of the radio on how it should look.
+![Storyboard](https://github.com/xlager/8-BitRadioJS-Three/blob/master/Storyboard%20CG.png?raw=true)
 
 ## Features
 *  Musics and possibility to change between them.
@@ -21,4 +22,3 @@ The image shows the first concept of the radio on how it should look.
 *  WebGL
 
 **Enjoy** 
-![Image](src)
