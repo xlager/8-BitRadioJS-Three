@@ -1,7 +1,7 @@
 ## Welcome to 8-Bit Radio with GitHub Pages
 
 You can access the [Radio here](https://xlager.github.io/8-BitRadioJS-Three/8bitRadio/tree.html).
-
+**Disclaimer, since some browser don't let the music autoplay starts on, the music will only start after you hit play**
 ### This is the final project of Computer Graphics made at Universidade Federal de Pelotas
 
 # Concept
